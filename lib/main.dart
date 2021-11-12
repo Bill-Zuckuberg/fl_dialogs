@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
 
 void main() {
@@ -54,37 +55,31 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     void Function() _showAlert() {
-      try {
-        return () => showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Dialog Title'),
-                  content: const Text('Sample alert'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          return Navigator.pop(context, 'Cancel');
-                        },
-                        child: const Text('Cancel')),
-                    TextButton(
-                        onPressed: () => Navigator.pop(context, 'Ok'),
-                        child: const Text('Ok'))
-                  ],
-                )).then((returnVal) => {
-              if (returnVal != null)
-                {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text('You clicked: $returnVal'),
-                        action:
-                            SnackBarAction(label: 'Back', onPressed: () {})),
-                  )
-                }
-            });
-      } catch (Exc) {
-        debugPrint(Exc.toString());
-        rethrow;
-      }
+      return () => showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: const Text('Dialog Title'),
+                content: const Text('Sample alert'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        return Navigator.pop(context, 'Cancel');
+                      },
+                      child: const Text('Cancel')),
+                  TextButton(
+                      onPressed: () => Navigator.pop(context, 'Ok'),
+                      child: const Text('Ok'))
+                ],
+              )).then((returnVal) => {
+            if (returnVal != null)
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text('You clicked: $returnVal'),
+                      action: SnackBarAction(label: 'Back', onPressed: () {})),
+                )
+              }
+          });
     }
 
     void Function() _showSimpleDialog() {
@@ -140,6 +135,30 @@ class _MyHomePageState extends State<MyHomePage> {
           });
     }
 
+    void Function() _showDatePicker() {
+      return () => showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2018),
+                  lastDate: DateTime(2025))
+              .then((returnVal) {
+            if (returnVal != null) {
+              DateTime _fromDate = DateTime.now();
+              _fromDate = returnVal;
+              final String date = DateFormat.yMMMd().format(_fromDate);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'You selected date: $date',
+                ),
+                action: SnackBarAction(
+                  label: 'Back',
+                  onPressed: () {},
+                ),
+              ));
+            }
+          });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -151,8 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _createButton(Colors.yellow, 'Simple Dialog', _showSimpleDialog()),
             _createButton(
                 Colors.green, 'Time Picker Dialog', _showTimePicker()),
-            _createButton(
-                Colors.blue, 'Date Picker Dialog', _showSimpleDialog()),
+            _createButton(Colors.blue, 'Date Picker Dialog', _showDatePicker()),
             _createButton(
                 Colors.purple, 'Date Range Pick Dialog', _showSimpleDialog()),
             _createButton(Colors.orange, 'Bottom Sheet', _showSimpleDialog()),
