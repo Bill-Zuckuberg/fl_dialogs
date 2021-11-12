@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(32),
           children: [
             _createButton(Colors.red, 'Alert Dialog', _showAlert()),
             _createButton(Colors.yellow, 'Simple Dialog', _showSimpleDialog()),
@@ -229,7 +229,12 @@ class _MyHomePageState extends State<MyHomePage> {
             _createButton(Colors.purple, 'Date Range Pick Dialog',
                 _showDateRangePicker()),
             _createButton(Colors.orange, 'Bottom Sheet', _showBottomSheet()),
-          ],
+          ]
+              .map((Widget button) => Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: button,
+                  ))
+              .toList(),
         ));
   }
 }
