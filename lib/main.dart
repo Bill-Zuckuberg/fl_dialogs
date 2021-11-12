@@ -34,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final scaffoldState = GlobalKey<ScaffoldState>();
+
     ElevatedButton _createButton(Color color, String str, void Function() fuc) {
       return ElevatedButton(
         style: ButtonStyle(
@@ -182,7 +184,37 @@ class _MyHomePageState extends State<MyHomePage> {
           });
     }
 
+    void Function() _showBottomSheet() {
+      return () =>
+          scaffoldState.currentState?.showBottomSheet((context) => Container(
+                height: 200,
+                decoration: const BoxDecoration(
+                    color: Colors.amber,
+                    border: Border(top: BorderSide(color: Colors.black12))),
+                child: ListView(
+                  children: [
+                    const ListTile(
+                      dense: true,
+                      title: Text('This is a bottom sheet'),
+                    ),
+                    const ListTile(
+                      title: Text('Click Ok to dismiss'),
+                      dense: true,
+                    ),
+                    ButtonBar(
+                      children: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('OK'))
+                      ],
+                    )
+                  ],
+                ),
+              ));
+    }
+
     return Scaffold(
+        key: scaffoldState,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -196,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _createButton(Colors.blue, 'Date Picker Dialog', _showDatePicker()),
             _createButton(Colors.purple, 'Date Range Pick Dialog',
                 _showDateRangePicker()),
-            _createButton(Colors.orange, 'Bottom Sheet', _showSimpleDialog()),
+            _createButton(Colors.orange, 'Bottom Sheet', _showBottomSheet()),
           ],
         ));
   }
