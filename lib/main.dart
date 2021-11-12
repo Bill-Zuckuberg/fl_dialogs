@@ -159,6 +159,29 @@ class _MyHomePageState extends State<MyHomePage> {
           });
     }
 
+    void Function() _showDateRangePicker() {
+      return () => showDateRangePicker(
+                  context: context,
+                  firstDate: DateTime(2018),
+                  lastDate: DateTime(2025))
+              .then((returnVal) {
+            if (returnVal != null) {
+              DateTimeRange _fromRange =
+                  DateTimeRange(start: DateTime.now(), end: DateTime.now());
+              final String range = DateFormat.yMMMd().format(_fromRange.start) +
+                  ' - ' +
+                  DateFormat.yMMMd().format(_fromRange.end);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(range),
+                action: SnackBarAction(
+                  label: 'Back',
+                  onPressed: () {},
+                ),
+              ));
+            }
+          });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -171,8 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _createButton(
                 Colors.green, 'Time Picker Dialog', _showTimePicker()),
             _createButton(Colors.blue, 'Date Picker Dialog', _showDatePicker()),
-            _createButton(
-                Colors.purple, 'Date Range Pick Dialog', _showSimpleDialog()),
+            _createButton(Colors.purple, 'Date Range Pick Dialog',
+                _showDateRangePicker()),
             _createButton(Colors.orange, 'Bottom Sheet', _showSimpleDialog()),
           ],
         ));
